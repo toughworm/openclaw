@@ -87,7 +87,7 @@ Reset the daily usage counters (useful for testing or manual overrides).
 
 ## Configuration
 
-The router uses `~/.clawdbot/smart-router-state.json` to persist usage data.
+The router uses `~/.openclaw/smart-router-state.json` to persist usage data.
 API Keys are managed in the standard `moltbot.json` under `auth.profiles`.
 
 ### Custom Routing Rules (Optional)

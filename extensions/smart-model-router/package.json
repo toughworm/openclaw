@@ -1,15 +1,15 @@
 {
-  "name": "@moltbot/smart-model-router",
+  "name": "@openclaw/smart-model-router",
   "version": "1.0.0",
-  "description": "Multi-model router and usage manager for Moltbot",
+  "description": "Multi-model router and usage manager for OpenClaw",
   "type": "module",
   "dependencies": {
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "moltbot": "workspace:*"
+    "openclaw": "workspace:*"
   },
-  "moltbot": {
+  "openclaw": {
     "extensions": [
       "./index.ts"
     ]

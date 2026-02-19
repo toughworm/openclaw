@@ -17,7 +17,7 @@ export class StateManager {
     try {
       const data = await fs.readFile(STATE_FILE, "utf-8");
       this.state = JSON.parse(data);
-      this.checkDailyReset();
+      await this.checkDailyReset();
     } catch (error) {
       // If file doesn't exist, use default
       await this.save();
@@ -25,25 +25,32 @@ export class StateManager {
   }
 
   async save() {
+    await fs.mkdir(path.dirname(STATE_FILE), { recursive: true });
     await fs.writeFile(STATE_FILE, JSON.stringify(this.state, null, 2));
   }
 
-  private checkDailyReset() {
+  private async checkDailyReset() {
     const today = new Date().toISOString().split("T")[0];
     if (this.state.lastResetDate !== today) {
       this.state.dailyUsage = {};
       this.state.lastResetDate = today;
-      this.save(); // Async save but we don't await here to avoid blocking constructor-like usage
+      await this.save();
     }
   }
 
   getUsage(profileId: string): number {
-    this.checkDailyReset();
+    // checkDailyReset is async, but getUsage is sync.
+    // We check date synchronously here just for reading in-memory state,
+    // actual reset persistence happens on next write.
+    const today = new Date().toISOString().split("T")[0];
+    if (this.state.lastResetDate !== today) {
+      return 0; // Usage is effectively 0 if date changed, even if not persisted yet
+    }
     return this.state.dailyUsage[profileId] || 0;
   }
 
   async incrementUsage(profileId: string) {
-    this.checkDailyReset();
+    await this.checkDailyReset();
     this.state.dailyUsage[profileId] = (this.state.dailyUsage[profileId] || 0) + 1;
     await this.save();
   }

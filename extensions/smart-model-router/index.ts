@@ -1,6 +1,6 @@
 import { upsertAuthProfile } from "../../src/agents/auth-profiles.js";
-import type { MoltbotConfig } from "../../src/config/config.js";
-import type { MoltbotPluginApi } from "../../src/plugins/types.js";
+import type { OpenClawConfig } from "../../src/config/config.js";
+import type { OpenClawPluginApi } from "../../src/plugins/types.js";
 import { StateManager } from "./src/state.js";
 import { createSmartRouterTool } from "./src/tool.js";
 
@@ -29,11 +29,11 @@ const plugin = {
       },
     },
   },
-  register(api: MoltbotPluginApi) {
+  register(api: OpenClawPluginApi) {
     // Sync API Keys from extension config to Auth Profiles
     const syncAuthKeys = async () => {
       try {
-        const config = (await api.runtime.config.loadConfig()) as MoltbotConfig;
+        const config = (await api.runtime.config.loadConfig()) as OpenClawConfig;
         const extConfig = (config as any).extensions?.["smart-model-router"] || {};
         const providers = extConfig.providers || [];
 
